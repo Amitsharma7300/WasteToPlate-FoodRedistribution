@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const seedAdmin = async () => {
   try {
-    const adminEmail = 'admin@urbanfood.com';
+    const adminEmail = 'admin@wastetoplate.com';
     const existingAdmin = await User.findOne({ email: adminEmail });
     if (existingAdmin) {
       console.log('✅ Admin user already exists.');

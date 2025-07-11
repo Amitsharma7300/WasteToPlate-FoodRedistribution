@@ -6,7 +6,7 @@ import useAuth from '../context/useAuth';
 
 const DonarDashboard = () => {
   const { user } = useAuth();
-  const [donationStats, setDonationStats] = useState({ total: 0, pending: 1 });
+  const [donationStats, setDonationStats] = useState({ total: 0, pending: 0});
   const [pickups, setPickups] = useState([]);
 
   useEffect(() => {

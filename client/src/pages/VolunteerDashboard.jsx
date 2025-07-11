@@ -1,23 +1,24 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 const VolunteerDashboard = () => {
   const [pickups, setPickups] = useState([]);
 
   useEffect(() => {
-    const fetchPickups = async () => {
-      try {
-        const res = await axios.get('http://localhost:5000/api/volunteer/assigned-pickups', {
-          withCredentials: true,
-        });
-        setPickups(res.data);
-      } catch (err) {
-        console.error('Error fetching pickups:', err);
-      }
-    };
-
-    fetchPickups();
+    axios.get('http://localhost:5000/api/volunteer/assigned-pickups', { withCredentials: true })
+      .then(res => setPickups(res.data))
+      .catch(() => setPickups([]));
   }, []);
+
+  const handleAccept = async (id) => {
+    await axios.post(`http://localhost:5000/api/volunteer/pickup/${id}/accept`, {}, { withCredentials: true });
+    // Refresh pickups list after accepting
+  };
+
+  const handleReject = async (id) => {
+    await axios.post(`http://localhost:5000/api/volunteer/pickup/${id}/reject`, {}, { withCredentials: true });
+    // Refresh pickups list after rejecting
+  };
 
   return (
     <div className="p-6">
@@ -35,6 +36,7 @@ const VolunteerDashboard = () => {
                 <th className="py-2 px-4">Food Type</th>
                 <th className="py-2 px-4">Quantity</th>
                 <th className="py-2 px-4">Pickup Time</th>
+                <th className="py-2 px-4">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -46,6 +48,20 @@ const VolunteerDashboard = () => {
                   <td className="py-2 px-4">{pickup.quantity}</td>
                   <td className="py-2 px-4">
                     {new Date(pickup.pickupTime).toLocaleString()}
+                  </td>
+                  <td className="py-2 px-4">
+                    <button
+                      onClick={() => handleAccept(pickup._id)}
+                      className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                    >
+                      Accept
+                    </button>
+                    <button
+                      onClick={() => handleReject(pickup._id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                      Reject
+                    </button>
                   </td>
                 </tr>
               ))}

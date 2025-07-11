@@ -19,7 +19,29 @@ const {
 // Controller-based routes (add auth if needed)
 router.get("/volunteers", authMiddleware, verifyAdmin, getVolunteers);
 router.get("/pending-donations", authMiddleware, verifyAdmin, getPendingDonations);
-router.post("/assign-pickup", authMiddleware, verifyAdmin, assignPickup);
+router.post("/assign-pickup", authMiddleware, verifyAdmin, async (req, res) => {
+  const { donationId, volunteerId } = req.body;
+
+  if (!donationId || !volunteerId) {
+    return res.status(400).json({ success: false, message: "Donation ID and Volunteer ID are required" });
+  }
+
+  try {
+    const updated = await FoodDonation.findByIdAndUpdate(
+      donationId,
+      { assignedVolunteer: volunteerId, status: "assigned" },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ success: false, message: "Donation not found" });
+    }
+
+    res.json({ success: true, donation: updated });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Assignment failed", error: error.message });
+  }
+});
 router.get("/assigned-pickups", authMiddleware, verifyAdmin, getAssignedPickups);
 
 // 🧑‍💼 Get all donors and their donation data
@@ -29,7 +51,7 @@ router.get('/donors', authMiddleware, verifyAdmin, async (req, res) => {
 
     const enrichedDonors = await Promise.all(
       donors.map(async donor => {
-        const donations = await FoodDonation.find({ userId: donor._id }).select('foodType quantity createdAt phoneNumber');
+        const donations = await FoodDonation.find({ donor: donor._id }).select('foodType quantity createdAt phoneNumber');
         return {
           id: donor._id,
           name: donor.name,

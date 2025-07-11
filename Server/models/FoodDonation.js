@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
 const foodDonationSchema = new mongoose.Schema({
-  donor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  donor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   foodType: { type: String, required: true },
   quantity: Number,
   pickupAddress: String,
