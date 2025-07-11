@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import login from '../assets/login.jpeg';
 import useAuth from '../context/useAuth';
+import axiosInstance from '../utils/axiosInstance';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -18,15 +18,10 @@ const Login = () => {
     setError('');
     try {
       // Login
-      await axios.post(axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`), formData, {
-        withCredentials: true,
-      });
+      await axiosInstance.post('/api/auth/login', formData);
 
       // Get user after login
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}api/auth/me`, {
-        withCredentials: true,
-      });
-
+      const res = await axiosInstance.get('/api/auth/me');
       const user = res.data;
       setUser(user);
 
