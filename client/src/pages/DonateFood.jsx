@@ -23,7 +23,7 @@ const DonateFood = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/food/donate",
+          `${import.meta.env.VITE_API_URL}/api/food/donate`,
         formData,
         {
           withCredentials: true,

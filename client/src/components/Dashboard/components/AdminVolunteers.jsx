@@ -7,7 +7,7 @@ const AdminVolunteer = () => {
 
   const fetchVolunteers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/volunteers", {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/volunteers`, {
         withCredentials: true,
       });
       setVolunteers(res.data);

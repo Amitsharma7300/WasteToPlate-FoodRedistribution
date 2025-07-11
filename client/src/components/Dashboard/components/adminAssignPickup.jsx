@@ -13,8 +13,8 @@ const AdminAssignPickup = () => {
     const fetchData = async () => {
       try {
         const [volRes, donRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/admin/volunteers", { withCredentials: true }),
-          axios.get("http://localhost:5000/api/admin/pending-donations", { withCredentials: true }),
+          axios.get(  `${import.meta.env.VITE_API_URL}/admin/volunteers`, { withCredentials: true }),
+          axios.get(  `${import.meta.env.VITE_API_URL}/api/admin/pending-donations`, { withCredentials: true }),
         ]);
         setVolunteers(volRes.data);
         setDonations(donRes.data);
@@ -33,7 +33,7 @@ const AdminAssignPickup = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/admin/assign-pickup",
+          `${import.meta.env.VITE_API_URL}/api/admin/assign-pickup`,
         {
           volunteerId: form.volunteer,
           donationId: form.donation,

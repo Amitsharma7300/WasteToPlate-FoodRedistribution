@@ -27,7 +27,7 @@ const ReceiverDashboard = () => {
 
   const fetchAccepted = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/receiver/accepted", {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/receiver/accepted`, {
         withCredentials: true,
       });
       setAccepted(res.data);
@@ -38,7 +38,7 @@ const ReceiverDashboard = () => {
 
   const acceptDonation = async (id) => {
     try {
-      await axios.post(`http://localhost:5000/api/receiver/accept/${id}`, {}, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/receiver/accept/${id}`, {}, {
         withCredentials: true,
       });
       setMessage("✅ Donation accepted");
@@ -52,7 +52,7 @@ const ReceiverDashboard = () => {
 
   const completeDonation = async (id) => {
     try {
-      await axios.patch(`http://localhost:5000/api/receiver/complete/${id}`, {}, {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/api/receiver/complete/${id}`, {}, {
         withCredentials: true,
       });
       setMessage("✅ Marked as completed");

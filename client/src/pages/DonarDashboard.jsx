@@ -13,7 +13,7 @@ const DonarDashboard = () => {
     const fetchStats = async () => {
       if (!user) return;
       try {
-        const res = await axios.get(`http://localhost:5000/api/donor/stats`, {
+        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/donor/stats`, {
           withCredentials: true,
         });
         setDonationStats(res.data);
@@ -26,7 +26,7 @@ const DonarDashboard = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:5000/api/donor/pending-pickups', { withCredentials: true })
+      .get(  `${import.meta.env.VITE_API_URL}/api/donor/pending-pickups`, { withCredentials: true })
       .then((res) => setPickups(res.data))
       .catch(() => setPickups([]));
   }, []);

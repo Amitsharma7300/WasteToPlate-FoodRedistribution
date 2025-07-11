@@ -18,12 +18,12 @@ const Login = () => {
     setError('');
     try {
       // Login
-      await axios.post('http://localhost:5000/api/auth/login', formData, {
+      await axios.post(axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`), formData, {
         withCredentials: true,
       });
 
       // Get user after login
-      const res = await axios.get('http://localhost:5000/api/auth/me', {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}api/auth/me`, {
         withCredentials: true,
       });
 

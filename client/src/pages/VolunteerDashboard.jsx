@@ -5,18 +5,18 @@ const VolunteerDashboard = () => {
   const [pickups, setPickups] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/volunteer/assigned-pickups', { withCredentials: true })
+    axios.get(  `${import.meta.env.VITE_API_URL}/api/volunteer/assigned-pickups`, { withCredentials: true })
       .then(res => setPickups(res.data))
       .catch(() => setPickups([]));
   }, []);
 
   const handleAccept = async (id) => {
-    await axios.post(`http://localhost:5000/api/volunteer/pickup/${id}/accept`, {}, { withCredentials: true });
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/volunteer/pickup/${id}/accept`, {}, { withCredentials: true });
     // Refresh pickups list after accepting
   };
 
   const handleReject = async (id) => {
-    await axios.post(`http://localhost:5000/api/volunteer/pickup/${id}/reject`, {}, { withCredentials: true });
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/volunteer/pickup/${id}/reject`, {}, { withCredentials: true });
     // Refresh pickups list after rejecting
   };
 
