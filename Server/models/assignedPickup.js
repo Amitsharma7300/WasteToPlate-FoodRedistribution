@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const assignedPickupSchema = new mongoose.Schema({
   donation: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Donation",
+    ref: "FoodDonation", // ✅ correct
     required: true,
   },
   volunteer: {

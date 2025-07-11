@@ -23,15 +23,13 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cookieParser());
-
-// CORS Configuration
 app.use(
   cors({
-    origin: "http://localhost:5173", // or your frontend port
+    origin: ["http://localhost:3000", "http://localhost:5173"],
     credentials: true,
   })
 );
+app.use(cookieParser());
 
 // API Routes
 app.use("/api/auth", authRoutes);

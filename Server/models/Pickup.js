@@ -1,18 +1,25 @@
+const mongoose = require("mongoose");
 
-const FoodDonation = require("./FoodDonation");
-
-// Controller function to get pickups assigned to a volunteer
-const getVolunteerPickups = async (req, res) => {
-  try {
-    const volunteerId = req.user._id; // or from token/session
-    const pickups = await FoodDonation.find({
-      assignedVolunteer: volunteerId,
-      status: "pending",
-    }).populate("donor", "name email"); // optional: get donor info
-    res.json(pickups);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch pickups" });
+const pickupSchema = new mongoose.Schema({
+  donation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "FoodDonation", // <-- FIXED HERE
+    required: true
+  },
+  volunteer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ["Assigned", "Picked", "Delivered"],
+    default: "Assigned"
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
-};
+});
 
-module.exports = { getVolunteerPickups };
+module.exports = mongoose.model("Pickup", pickupSchema);

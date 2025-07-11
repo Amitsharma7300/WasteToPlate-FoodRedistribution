@@ -9,6 +9,7 @@ import AdminDonors from "../components/Dashboard/components/AdminDonors";
 import AdminNGOs from "../components/Dashboard/components/AdminNGOs";
 import AdminVolunteers from "../components/Dashboard/components/AdminVolunteers";
 import AdminAssignPickup from "../components/Dashboard/components/adminAssignPickup";
+import AddVolunteer from "../components/Dashboard/pages/AddVolunteer";
 import DashboardHome from "../components/Dashboard/pages/DashboardHome";
 import Donations from "../components/Dashboard/pages/Donations";
 import Pickups from "../components/Dashboard/pages/Pickups";
@@ -81,6 +82,7 @@ const AppRoutes = () => {
         <Route path="donations" element={<Donations />} />
         <Route path="pickups" element={<Pickups />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="add-volunteer" element={<AddVolunteer />} />
       </Route>
     </Routes>
   );

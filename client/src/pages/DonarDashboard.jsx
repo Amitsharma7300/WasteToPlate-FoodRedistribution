@@ -6,7 +6,8 @@ import useAuth from '../context/useAuth';
 
 const DonarDashboard = () => {
   const { user } = useAuth();
-  const [donationStats, setDonationStats] = useState({ total: 0, pending: 0 });
+  const [donationStats, setDonationStats] = useState({ total: 0, pending: 1 });
+  const [pickups, setPickups] = useState([]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -22,6 +23,13 @@ const DonarDashboard = () => {
     };
     fetchStats();
   }, [user]);
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:5000/api/donor/pending-pickups', { withCredentials: true })
+      .then((res) => setPickups(res.data))
+      .catch(() => setPickups([]));
+  }, []);
 
   if (!user) {
     return (
@@ -101,6 +109,22 @@ const DonarDashboard = () => {
             <li>Clearly mention the quantity and pickup time.</li>
             <li>Contact the NGO if there are delays.</li>
           </ul>
+        </div>
+
+        {/* Pending Pickups Section */}
+        <div className="bg-white rounded-xl shadow p-6 mt-6">
+          <h2 className="text-xl font-bold mb-4">Pending Pickups</h2>
+          {pickups.length === 0 ? (
+            <div>No pending pickups for your donations.</div>
+          ) : (
+            <ul>
+              {pickups.map((pickup) => (
+                <li key={pickup._id}>
+                  {pickup.foodType} - {pickup.pickupAddress} (Volunteer: {pickup.assignedVolunteer?.name || 'Not assigned'})
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
       </div>
