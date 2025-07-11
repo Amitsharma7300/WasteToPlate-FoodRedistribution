@@ -1,8 +1,6 @@
 import axios from "axios";
-
-const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, // or process.env.REACT_APP_API_BASE_URL for CRA
+const axiosInstance = axios.create({
+  baseURL: "https://wastetoplate-foodredistribution.onrender.com",
   withCredentials: true,
 });
-
-export default instance;
+export default axiosInstance;
