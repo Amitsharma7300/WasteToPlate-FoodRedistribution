@@ -64,8 +64,9 @@ const loginUser = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // true in production (HTTPS)
-      sameSite: "Lax",
+      secure: true,           // required for HTTPS and cross-origin
+      sameSite: "none",       // required for cross-origin
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
     });
 
     return res.status(200).json({
