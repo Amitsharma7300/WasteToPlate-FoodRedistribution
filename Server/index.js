@@ -11,7 +11,7 @@ dotenv.config();
 const connectDB = require("./config/Db");
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
-const foodRoutes = require("./routes/foodroutes");
+const foodRoutes = require("./routes/foodRoutes");
 const volunteerRoutes = require("./routes/volunteerRoutes");
 const receiverRoutes = require("./routes/receiverRoutes");
 const adminRoutes = require("./routes/adminRoutes");
