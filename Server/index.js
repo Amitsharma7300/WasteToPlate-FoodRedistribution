@@ -25,7 +25,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin:" https://wastetoplate-foodredistribution.vercel.app/",
+    origin: "https://wastetoplate-foodredistribution.vercel.app",
     credentials: true,
   })
 );
