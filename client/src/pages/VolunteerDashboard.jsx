@@ -1,22 +1,23 @@
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
+
 import { useEffect, useState } from 'react';
 
 const VolunteerDashboard = () => {
   const [pickups, setPickups] = useState([]);
 
   useEffect(() => {
-    axios.get(  `${import.meta.env.VITE_API_URL}/api/volunteer/assigned-pickups`, { withCredentials: true })
+    axiosInstance.get('/api/volunteer/assigned-pickups')
       .then(res => setPickups(res.data))
       .catch(() => setPickups([]));
   }, []);
 
   const handleAccept = async (id) => {
-    await axios.post(`${import.meta.env.VITE_API_URL}/api/volunteer/pickup/${id}/accept`, {}, { withCredentials: true });
+    await axiosInstance.post(`/api/volunteer/pickup/${id}/accept`);
     // Refresh pickups list after accepting
   };
 
   const handleReject = async (id) => {
-    await axios.post(`${import.meta.env.VITE_API_URL}/api/volunteer/pickup/${id}/reject`, {}, { withCredentials: true });
+    await axiosInstance.post(`/api/volunteer/pickup/${id}/reject`);
     // Refresh pickups list after rejecting
   };
 

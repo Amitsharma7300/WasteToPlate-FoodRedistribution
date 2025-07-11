@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const AdminDonors = () => {
   const [donors, setDonors] = useState([]);
@@ -7,9 +7,7 @@ const AdminDonors = () => {
   useEffect(() => {
     const fetchDonors = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/admin/donors", {
-          withCredentials: true,
-        });
+        const res = await axiosInstance.get("/api/admin/donors");
         setDonors(res.data);
       } catch (err) {
         console.error("Error fetching donors:", err);
@@ -38,7 +36,7 @@ const AdminDonors = () => {
             </thead>
             <tbody>
               {donors.map((donor, index) => (
-                <tr key={donor.id} className="hover:bg-gray-50">
+                <tr key={donor.id || donor._id} className="hover:bg-gray-50">
                   <td className="border px-3 py-2">{index + 1}</td>
                   <td className="border px-3 py-2 font-semibold">{donor.name}</td>
                   <td className="border px-3 py-2">{donor.email}</td>

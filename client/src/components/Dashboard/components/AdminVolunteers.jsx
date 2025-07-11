@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const AdminVolunteer = () => {
   const [volunteers, setVolunteers] = useState([]);
@@ -7,9 +7,7 @@ const AdminVolunteer = () => {
 
   const fetchVolunteers = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/volunteers`, {
-        withCredentials: true,
-      });
+      const res = await axiosInstance.get("/api/admin/volunteers");
       setVolunteers(res.data);
     } catch (err) {
       console.error("Error fetching volunteers", err);

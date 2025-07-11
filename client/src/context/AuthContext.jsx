@@ -1,30 +1,26 @@
-import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
+import axiosInstance from '../utils/axiosInstance';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // ⏳ Loading flag for initial fetch
+  const [loading, setLoading] = useState(true);
 
   const getUser = async () => {
     try {
-      const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/auth/me`, {
-        withCredentials: true,
-      });
+      const res = await axiosInstance.get('/api/auth/me');
       setUser(res.data);
     } catch (err) {
       setUser(null);
     } finally {
-      setLoading(false); // 🔁 Mark loading complete
+      setLoading(false);
     }
   };
 
   const logout = async () => {
     try {
-      await axios.post(  `${import.meta.env.VITE_API_URL}/api/auth/logout`, {}, {
-        withCredentials: true,
-      });
+      await axiosInstance.post('/api/auth/logout');
       setUser(null);
     } catch (err) {
       console.error("Logout failed", err);
@@ -42,5 +38,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// 🔁 useAuth hook for components
 export const useAuth = () => useContext(AuthContext);

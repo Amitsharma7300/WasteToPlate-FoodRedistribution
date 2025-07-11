@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const StatsCard = () => {
   const [stats, setStats] = useState({
@@ -13,9 +13,7 @@ const StatsCard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/admin/stats`, {
-          withCredentials: true,
-        });
+        const res = await axiosInstance.get("/api/admin/stats");
         setStats(res.data);
       } catch (err) {
         console.error("Failed to fetch stats", err);

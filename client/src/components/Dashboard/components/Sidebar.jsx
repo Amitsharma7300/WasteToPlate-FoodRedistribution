@@ -11,7 +11,7 @@ import {
   FaClipboardList,
 } from "react-icons/fa";
 import { useAuth } from "../../../context/AuthContext";
-import axios from "axios";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const Sidebar = () => {
   const { user, setUser } = useAuth();
@@ -19,7 +19,7 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post( `${import.meta.env.VITE_API_URL}/api/auth/logout`, {}, { withCredentials: true });
+      await axiosInstance.post('/api/auth/logout');
       setUser(null);
       navigate("/login");
     } catch (err) {

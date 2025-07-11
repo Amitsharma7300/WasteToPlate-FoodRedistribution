@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const AdminNGOs = () => {
   const [ngos, setNgos] = useState([]);
@@ -10,9 +10,7 @@ const AdminNGOs = () => {
 
   const fetchNGOs = async () => {
     try {
-      const res = await axios.get( `${import.meta.env.VITE_API_URL}/api/admin/ngos`, {
-        withCredentials: true,
-      });
+      const res = await axiosInstance.get("/api/admin/ngos");
       setNgos(res.data);
     } catch (err) {
       console.error("Error fetching NGOs", err);

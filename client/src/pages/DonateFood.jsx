@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useState } from "react";
 import { FaBox, FaMapMarkerAlt, FaPhoneAlt, FaUtensils } from "react-icons/fa";
 import donateImg from "../assets/donation.jpeg";
 import useAuth from "../context/useAuth"; // <-- FIXED: useAuth should be imported as default, not { useAuth }
+import axiosInstance from "../utils/axiosInstance";
 
 const DonateFood = () => {
   const { user } = useAuth();
@@ -22,8 +22,8 @@ const DonateFood = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/food/donate`,
+      const res = await axiosInstance.post(
+          `/api/food/donate`,
         formData,
         {
           withCredentials: true,

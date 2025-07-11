@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaClock, FaHandHoldingHeart, FaPlusCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import useAuth from '../context/useAuth';
+import axiosInstance from '../utils/axiosInstance'; // <-- use this
 
 const DonarDashboard = () => {
   const { user } = useAuth();
@@ -13,9 +13,7 @@ const DonarDashboard = () => {
     const fetchStats = async () => {
       if (!user) return;
       try {
-        const res = await axios.get(  `${import.meta.env.VITE_API_URL}/api/donor/stats`, {
-          withCredentials: true,
-        });
+        const res = await axiosInstance.get('/api/donor/stats');
         setDonationStats(res.data);
       } catch (err) {
         setDonationStats({ total: 0, pending: 0 });
@@ -25,8 +23,8 @@ const DonarDashboard = () => {
   }, [user]);
 
   useEffect(() => {
-    axios
-      .get(  `${import.meta.env.VITE_API_URL}/api/donor/pending-pickups`, { withCredentials: true })
+    axiosInstance
+      .get('/api/donor/pending-pickups')
       .then((res) => setPickups(res.data))
       .catch(() => setPickups([]));
   }, []);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 const ReceiverDashboard = () => {
   const [available, setAvailable] = useState([]);
@@ -15,7 +15,7 @@ const ReceiverDashboard = () => {
   const fetchAvailable = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/receiver/donations", {
+      const res = await axiosInstance.get("/api/receiver/donations", {
         withCredentials: true,
       });
       setAvailable(res.data);
@@ -27,7 +27,7 @@ const ReceiverDashboard = () => {
 
   const fetchAccepted = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/receiver/accepted`, {
+      const res = await axiosInstance.get("/api/receiver/accepted", {
         withCredentials: true,
       });
       setAccepted(res.data);
@@ -38,7 +38,7 @@ const ReceiverDashboard = () => {
 
   const acceptDonation = async (id) => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/receiver/accept/${id}`, {}, {
+      await axiosInstance.post(`/api/receiver/accept/${id}`, {}, {
         withCredentials: true,
       });
       setMessage("✅ Donation accepted");
@@ -52,7 +52,7 @@ const ReceiverDashboard = () => {
 
   const completeDonation = async (id) => {
     try {
-      await axios.patch(`${import.meta.env.VITE_API_URL}/api/receiver/complete/${id}`, {}, {
+      await axiosInstance.patch(`/api/receiver/complete/${id}`, {}, {
         withCredentials: true,
       });
       setMessage("✅ Marked as completed");

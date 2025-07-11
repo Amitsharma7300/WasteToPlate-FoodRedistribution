@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const AdminAssignPickup = () => {
   const [volunteers, setVolunteers] = useState([]);
@@ -13,8 +13,8 @@ const AdminAssignPickup = () => {
     const fetchData = async () => {
       try {
         const [volRes, donRes] = await Promise.all([
-          axios.get(  `${import.meta.env.VITE_API_URL}/admin/volunteers`, { withCredentials: true }),
-          axios.get(  `${import.meta.env.VITE_API_URL}/api/admin/pending-donations`, { withCredentials: true }),
+          axiosInstance.get("/api/admin/volunteers"),
+          axiosInstance.get("/api/admin/pending-donations"),
         ]);
         setVolunteers(volRes.data);
         setDonations(donRes.data);
@@ -32,13 +32,12 @@ const AdminAssignPickup = () => {
     console.log("Donation ID:", form.donation);
 
     try {
-      const res = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/admin/assign-pickup`,
+      const res = await axiosInstance.post(
+        "/api/admin/assign-pickup",
         {
           volunteerId: form.volunteer,
           donationId: form.donation,
-        },
-        { withCredentials: true }
+        }
       );
       setMessage(res.data.message || "Pickup assigned successfully.");
       setForm({ volunteer: "", donation: "" });
