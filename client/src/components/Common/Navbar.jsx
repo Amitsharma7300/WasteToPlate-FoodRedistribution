@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import axiosInstance from "../../utils/axiosInstance";
 
 const Navbar = () => {
-  const { user, setUser } = useAuth();            // assume your AuthContext provides setUser
+  const { user, setUser, loading } = useAuth();            // assume your AuthContext provides setUser
   const navigate = useNavigate();
   const [isMenuOpen, setMenuOpen] = useState(false);
 
