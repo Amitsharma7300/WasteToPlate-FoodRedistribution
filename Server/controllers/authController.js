@@ -107,11 +107,11 @@ const getMe = async (req, res) => {
 const logoutUser = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: "Lax",
-    secure: false, // true in production
+    secure: true,
+    sameSite: "none",
   });
 
-  return res.status(200).json({ message: "Logout successful" });
+  return res.status(200).json({ success: true, message: "Logout successful" });
 };
 
 module.exports = {
