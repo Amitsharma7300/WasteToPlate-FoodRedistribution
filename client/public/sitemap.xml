@@ -12,5 +12,8 @@
     <loc>https://wastetoplatefooddonation.vercel.app/contact</loc>
     <priority>0.8</priority>
   </url>
- 
+  <url>
+    <loc>https://wastetoplatefooddonation.vercel.app/login</loc>
+    <priority>0.5</priority>
+  </url>
 </urlset>
