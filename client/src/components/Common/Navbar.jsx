@@ -4,27 +4,39 @@ import { useAuth } from "../../context/AuthContext";
 import axiosInstance from "../../utils/axiosInstance";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, setUser } = useAuth();            // assume your AuthContext provides setUser
   const navigate = useNavigate();
   const [isMenuOpen, setMenuOpen] = useState(false);
 
+  // call correct endpoint, clear user, then redirect
   const handleLogout = async () => {
     try {
       await axiosInstance.post("/api/auth/logout");
-      logout();
+      setUser(null);
       navigate("/login");
     } catch (err) {
       console.error("Logout failed:", err);
+    } finally {
+      setMenuOpen(false);
     }
   };
 
+  // pick dashboard path by role
   const getDashboardRoute = () => {
-    const role = user?.role?.toLowerCase();
-    if (role === "donor") return "/dashboard/donor";
-    if (role === "ngo" || role === "receiver") return "/dashboard/ngo";
-    if (role === "volunteer") return "/dashboard/volunteer";
-    if (role === "admin") return "/dashboard/admin";
-    return "/";
+    if (!user) return "/";
+    switch (user.role?.toLowerCase()) {
+      case "donor":
+        return "/dashboard/donor";
+      case "ngo":
+      case "receiver":
+        return "/dashboard/ngo";
+      case "volunteer":
+        return "/dashboard/volunteer";
+      case "admin":
+        return "/dashboard/admin";
+      default:
+        return "/";
+    }
   };
 
   return (
@@ -36,15 +48,26 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex space-x-6 items-center">
-          <Link to="/" className="text-gray-700 hover:text-green-600 transition">Home</Link>
-          <Link to="/about" className="text-gray-700 hover:text-green-600 transition">About</Link>
-          <Link to="/contact" className="text-gray-700 hover:text-green-600 transition">Contact</Link>
+        <nav className="hidden md:flex items-center space-x-6">
+          <Link to="/" className="text-gray-700 hover:text-green-600 transition">
+            Home
+          </Link>
+          <Link to="/about" className="text-gray-700 hover:text-green-600 transition">
+            About
+          </Link>
+          <Link to="/contact" className="text-gray-700 hover:text-green-600 transition">
+            Contact
+          </Link>
 
           {user ? (
             <>
-              <Link to="/donate" className="text-gray-700 hover:text-green-600 transition">Donate</Link>
-              <Link to={getDashboardRoute()} className="text-gray-700 hover:text-green-600 transition">
+              <Link to="/donate" className="text-gray-700 hover:text-green-600 transition">
+                Donate
+              </Link>
+              <Link
+                to={getDashboardRoute()}
+                className="text-gray-700 hover:text-green-600 transition"
+              >
                 Dashboard
               </Link>
               <button
@@ -56,7 +79,9 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/login" className="text-gray-700 hover:text-green-600 transition">Login</Link>
+              <Link to="/login" className="text-gray-700 hover:text-green-600 transition">
+                Login
+              </Link>
               <Link
                 to="/register"
                 className="px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
@@ -67,22 +92,28 @@ const Navbar = () => {
           )}
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Hamburger */}
         <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!isMenuOpen)}>
-            <svg
-              className="w-6 h-6 text-gray-700"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {isMenuOpen ? (
+          <button onClick={() => setMenuOpen((o) => !o)} aria-label="Toggle menu">
+            {isMenuOpen ? (
+              <svg
+                className="w-6 h-6 text-gray-700"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
+              </svg>
+            ) : (
+              <svg
+                className="w-6 h-6 text-gray-700"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
+              </svg>
+            )}
           </button>
         </div>
       </div>
@@ -90,25 +121,45 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-white px-4 pb-4 space-y-2">
-          <Link to="/" className="block text-gray-700 hover:text-green-600">Home</Link>
-          <Link to="/about" className="block text-gray-700 hover:text-green-600">About</Link>
-          <Link to="/contact" className="block text-gray-700 hover:text-green-600">Contact</Link>
+          <Link to="/" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-green-600">
+            Home
+          </Link>
+          <Link to="/about" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-green-600">
+            About
+          </Link>
+          <Link to="/contact" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-green-600">
+            Contact
+          </Link>
 
           {user ? (
             <>
-              <Link to="/donate" className="block text-gray-700 hover:text-green-600">Donate</Link>
-              <Link to={getDashboardRoute()} className="block text-gray-700 hover:text-green-600">Dashboard</Link>
+              <Link to="/donate" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-green-600">
+                Donate
+              </Link>
+              <Link
+                to={getDashboardRoute()}
+                onClick={() => setMenuOpen(false)}
+                className="block text-gray-700 hover:text-green-600"
+              >
+                Dashboard
+              </Link>
               <button
                 onClick={handleLogout}
-                className="w-full text-left px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                className="w-full text-left px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="block text-gray-700 hover:text-green-600">Login</Link>
-              <Link to="/register" className="block text-white bg-green-600 px-4 py-1 rounded hover:bg-green-700">
+              <Link to="/login" onClick={() => setMenuOpen(false)} className="block text-gray-700 hover:text-green-600">
+                Login
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setMenuOpen(false)}
+                className="block text-white bg-green-600 px-4 py-1 rounded hover:bg-green-700"
+              >
                 Register
               </Link>
             </>
