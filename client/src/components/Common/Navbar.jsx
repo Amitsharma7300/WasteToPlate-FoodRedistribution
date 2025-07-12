@@ -1,15 +1,30 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import axiosInstance from "../../utils/axiosInstance";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post("/api/auth/logout");
+      logout();
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
+  const getDashboardRoute = () => {
+    const role = user?.role?.toLowerCase();
+    if (role === "donor") return "/dashboard/donor";
+    if (role === "ngo" || role === "receiver") return "/dashboard/ngo";
+    if (role === "volunteer") return "/dashboard/volunteer";
+    if (role === "admin") return "/dashboard/admin";
+    return "/";
   };
 
   return (
@@ -28,27 +43,10 @@ const Navbar = () => {
 
           {user ? (
             <>
-              <Link to="/donate" className="text-gray-700 hover:text-green-600 transition">
-                Donate
+              <Link to="/donate" className="text-gray-700 hover:text-green-600 transition">Donate</Link>
+              <Link to={getDashboardRoute()} className="text-gray-700 hover:text-green-600 transition">
+                Dashboard
               </Link>
-
-              {/* Role-based Dashboard */}
-              {user.role === "Donor" && (
-                <Link to="/dashboard/donor" className="text-gray-700 hover:text-green-600 transition">
-                  Donor Panel
-                </Link>
-              )}
-              {user.role === "NGO" && (
-                <Link to="/dashboard/ngo" className="text-gray-700 hover:text-green-600 transition">
-                  NGO Panel
-                </Link>
-              )}
-              {user.role === "Volunteer" && (
-                <Link to="/dashboard/volunteer" className="text-gray-700 hover:text-green-600 transition">
-                  Volunteer Panel
-                </Link>
-              )}
-
               <button
                 onClick={handleLogout}
                 className="ml-2 px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
@@ -58,9 +56,7 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/login" className="text-gray-700 hover:text-green-600 transition">
-                Login
-              </Link>
+              <Link to="/login" className="text-gray-700 hover:text-green-600 transition">Login</Link>
               <Link
                 to="/register"
                 className="px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
@@ -71,7 +67,7 @@ const Navbar = () => {
           )}
         </nav>
 
-        {/* Mobile Toggle Button */}
+        {/* Mobile Menu Button */}
         <div className="md:hidden">
           <button onClick={() => setMenuOpen(!isMenuOpen)}>
             <svg
@@ -90,7 +86,6 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-      
 
       {/* Mobile Menu */}
       {isMenuOpen && (
@@ -102,17 +97,7 @@ const Navbar = () => {
           {user ? (
             <>
               <Link to="/donate" className="block text-gray-700 hover:text-green-600">Donate</Link>
-
-              {user.role === "Donor" && (
-                <Link to="/dashboard/donor" className="block text-gray-700 hover:text-green-600">Donor Panel</Link>
-              )}
-              {user.role === "NGO" && (
-                <Link to="/dashboard/ngo" className="block text-gray-700 hover:text-green-600">NGO Panel</Link>
-              )}
-              {user.role === "Volunteer" && (
-                <Link to="/dashboard/volunteer" className="block text-gray-700 hover:text-green-600">Volunteer Panel</Link>
-              )}
-
+              <Link to={getDashboardRoute()} className="block text-gray-700 hover:text-green-600">Dashboard</Link>
               <button
                 onClick={handleLogout}
                 className="w-full text-left px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
