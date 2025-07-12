@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-impirt { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/authContext";
 import axiosInstance from "../../utils/axiosInstance";
 
 const Navbar = () => {
