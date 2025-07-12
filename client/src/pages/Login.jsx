@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import login from '../assets/login.jpeg';
@@ -26,25 +25,23 @@ const Login = () => {
       const user = res.data;
       setUser(user);
 
-      // Small delay to ensure cookie is set
-      setTimeout(() => {
-        switch (user.role) {
-          case 'admin':
-            navigate('/dashboard/admin');
-            break;
-          case 'donor':
-            navigate('/dashboard/donor');
-            break;
-          case 'receiver':
-            navigate('/dashboard/ngo');
-            break;
-          case 'volunteer':
-            navigate('/dashboard/volunteer');
-            break;
-          default:
-            navigate('/');
-        }
-      }, 200);
+      // 🌐 Role-Based Navigation
+      switch (user.role) {
+        case 'admin':
+          navigate('/dashboard/admin');
+          break;
+        case 'donor':
+          navigate('/dashboard/donor');
+          break;
+        case 'receiver':
+          navigate('/dashboard/ngo');
+          break;
+        case 'volunteer':
+          navigate('/dashboard/volunteer');
+          break;
+        default:
+          navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     }
@@ -53,9 +50,12 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-200 via-blue-100 to-green-100 p-4">
       <div className="bg-white/90 backdrop-blur-md p-0 md:p-10 rounded-2xl shadow-2xl w-full max-w-3xl border border-green-100 flex flex-col md:flex-row items-center">
+        {/* Left Side - Image */}
         <div className="hidden md:flex flex-1 items-center justify-center p-6">
           <img src={login} alt="Login Illustration" className="max-w-xs w-full h-auto object-contain" />
         </div>
+
+        {/* Right Side - Form */}
         <div className="flex-1 w-full p-8 md:p-0">
           <div className="flex flex-col items-center mb-6">
             <h2 className="text-3xl font-extrabold mb-1 text-green-700 tracking-tight">Sign in to your account</h2>
@@ -99,11 +99,12 @@ const Login = () => {
             </button>
           </form>
 
+          {/* 🧪 Dev Shortcut */}
           <div className="text-center mt-4">
             <button
               onClick={() =>
                 setFormData({
-                  email: 'admin@urbanfood.com',
+                  email: 'admin@urbanfood.com', // Match backend seeded admin
                   password: 'admin123'
                 })
               }
