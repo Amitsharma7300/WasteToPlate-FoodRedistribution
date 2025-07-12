@@ -4,11 +4,10 @@ import { useAuth } from "../../context/AuthContext";
 import axiosInstance from "../../utils/axiosInstance";
 
 const Navbar = () => {
-  const { user, setUser, loading } = useAuth();            // assume your AuthContext provides setUser
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  // call correct endpoint, clear user, then redirect
   const handleLogout = async () => {
     try {
       await axiosInstance.post("/api/auth/logout");
@@ -21,7 +20,6 @@ const Navbar = () => {
     }
   };
 
-  // pick dashboard path by role
   const getDashboardRoute = () => {
     if (!user) return "/";
     switch (user.role?.toLowerCase()) {
